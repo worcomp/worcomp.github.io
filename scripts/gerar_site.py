@@ -9,11 +9,13 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 URL = "https://worcomp.github.io/"
-VERSAO = "20260930c"  # troque ao alterar o CSS ou o JS, para evitar cache antigo
+VERSAO = "20260930d"  # troque ao alterar o CSS ou o JS, para evitar cache antigo
 EVENTO = "WORCOMP 2026"
 DATAS = "26 e 27 de novembro de 2026"
 LOCAL = "Miniauditório do NTB"
 EMAIL = "helvecio.leal@ufopa.edu.br"
+CURSOS = "Ciência da Computação, Sistemas de Informação e Inteligência Artificial"
+REALIZACAO = "Cursos de Computação da Ufopa"
 
 MENU = [
     ("index.html", "Início"),
@@ -31,9 +33,9 @@ PROGRAMACAO = [
     ("dia", "DIA 01 (26/11)"),
     ("turno", "MANHÃ"),
     ("item", "08h00", "09h00", "Credenciamento e Cerimônia de Abertura", "", "", ""),
-    ("item", "09h00", "10h00", "Palestra 1", "Desafios do uso de dados no âmbito empresarial", "Palestrante", "Sami Yamouni"),
+    ("item", "09h00", "10h00", "Palestra 1", "Desafios do uso de dados no âmbito empresarial", "Palestrante", "Sami Yamouni (Ipiranga)"),
     ("item", "10h00", "10h15", "", "COFFEE BREAK", "", ""),
-    ("item", "10h15", "11h15", "Palestra 2", "Desafios do uso de dados no âmbito empresarial", "Palestrante", "Mauro Mitsuo Yamachita Junior (Malwee)"),
+    ("item", "10h15", "11h15", "Palestra 2", "Desafios do uso de dados no âmbito empresarial", "Palestrante", "Mauro Mitsuo Yamachita Junior (Grupo Malwee)"),
     ("item", "11h15", "12h15", "Palestra 3", "Agentes de IA e isolamento de dados nas empresas", "Palestrante", "Ari Rocha"),
     ("turno", "12h15 - 14h00 ALMOÇO"),
     ("turno", "TARDE"),
@@ -49,14 +51,15 @@ PROGRAMACAO = [
     ("item", "17h30", "", "Confraternização", "local a confirmar", "", ""),
 ]
 
-# (iniciais, nome, função, texto)
+# (iniciais, nome, função, texto, foto em assets/img/pessoas ou "")
 PALESTRANTES = [
-    ("SY", "Sami Yamouni", "Gerente de Ciência de Dados",
-     "Palestra: Desafios do uso de dados no âmbito empresarial. Quinta-feira, 26 de novembro, às 9h."),
-    ("MY", "Mauro Mitsuo Yamachita Junior", "Gerente de Dados e IA, Malwee",
-     "Palestra: Desafios do uso de dados no âmbito empresarial. Quinta-feira, 26 de novembro, às 10h15."),
+    ("SY", "Sami Yamouni", "Gerente de Ciência de Dados, Ipiranga",
+     "Palestra: Desafios do uso de dados no âmbito empresarial. Quinta-feira, 26 de novembro, às 9h.",
+     "sami-yamouni.jpg"),
+    ("MY", "Mauro Mitsuo Yamachita Junior", "Gerente de Dados e IA, Grupo Malwee",
+     "Palestra: Desafios do uso de dados no âmbito empresarial. Quinta-feira, 26 de novembro, às 10h15.", ""),
     ("AR", "Ari Rocha", "Palestrante convidado",
-     "Palestra: Agentes de IA e isolamento de dados nas empresas. Quinta-feira, 26 de novembro, às 11h15."),
+     "Palestra: Agentes de IA e isolamento de dados nas empresas. Quinta-feira, 26 de novembro, às 11h15.", ""),
 ]
 
 ATUAL = ' aria-current="page"'
@@ -96,7 +99,7 @@ def pagina(arquivo, titulo, descricao, corpo):
     <div class="container">
       <a class="ufopa-marca" href="https://www.ufopa.edu.br/"><img src="assets/img/ufopa-brasao.png" alt="Brasão da Ufopa" width="30" height="30"><span>Universidade Federal do Oeste do Pará</span></a>
       <div class="barra-direita">
-        <span class="ufopa-instituto">Bacharelado em Inteligência Artificial</span>
+        <a class="ufopa-instituto" href="https://ieg.ufopa.edu.br/">Instituto de Engenharia e Geociências</a>
       </div>
     </div>
   </div>
@@ -131,7 +134,7 @@ def pagina(arquivo, titulo, descricao, corpo):
       <div>
         <div class="marca-rodape"><img src="assets/img/logo.svg" alt="" width="40" height="40"><span>{EVENTO}</span></div>
         <p>{DATAS}</p>
-        <p>Bacharelado em Inteligência Artificial, Ufopa</p>
+        <p>{REALIZACAO}</p>
       </div>
       <div>
         <p><strong>Local</strong></p>
@@ -154,6 +157,13 @@ def pagina(arquivo, titulo, descricao, corpo):
 """
     (RAIZ / arquivo).write_text(html, encoding="utf-8")
     print("ok", arquivo)
+
+
+def retrato(iniciais, nome, foto):
+    """Foto da pessoa, ou as iniciais quando não há foto."""
+    if foto:
+        return f'<img class="foto" src="assets/img/pessoas/{foto}" alt="Foto de {nome}" width="88" height="88">'
+    return f'<div class="iniciais" aria-hidden="true">{iniciais}</div>'
 
 
 def interna(titulo, botoes, conteudo):
@@ -212,7 +222,7 @@ pagina("index.html", "Início",
 
     <section class="pagina">
       <div class="container">
-        <p>O {EVENTO} é um evento promovido pelo Bacharelado em Inteligência Artificial da <a href="https://www.ufopa.edu.br/">Universidade Federal do Oeste do Pará (Ufopa)</a>. O evento aproxima estudantes, professores e profissionais que trabalham com computação, dados e Inteligência Artificial, e abre espaço para os alunos apresentarem os trabalhos que desenvolvem.</p>
+        <p>O {EVENTO} é um evento promovido pelos cursos de computação da <a href="https://www.ufopa.edu.br/">Universidade Federal do Oeste do Pará (Ufopa)</a>: os bacharelados em {CURSOS}, do Instituto de Engenharia e Geociências (IEG). O evento aproxima estudantes, professores e profissionais que trabalham com computação, dados e Inteligência Artificial, e abre espaço para os alunos apresentarem os trabalhos que desenvolvem.</p>
         <p>A edição deste ano será realizada presencialmente na Ufopa, em Santarém (PA), no {LOCAL}, nos dias {DATAS}.</p>
         <p>A programação inclui as atividades:</p>
         <ul>
@@ -245,7 +255,7 @@ pagina("index.html", "Início",
         <h2 class="rotulo-secao">Realização:</h2>
         <div class="realizacao">
           <img src="assets/img/ufopa-brasao.png" alt="Brasão da Ufopa" width="72" height="72">
-          <p><strong>Universidade Federal do Oeste do Pará</strong><br>Bacharelado em Inteligência Artificial</p>
+          <p><strong>Universidade Federal do Oeste do Pará</strong><br>Cursos de Computação: {CURSOS}</p>
         </div>
       </div>
     </section>""")
@@ -269,14 +279,14 @@ pagina("programacao.html", "Programação",
 # Palestrantes
 cartoes = "\n".join(
     f"""          <li>
-            <div class="iniciais" aria-hidden="true">{ini}</div>
+            {retrato(ini, nome, foto)}
             <div>
               <h3>{nome}</h3>
               <p class="funcao">{funcao}</p>
               <p>{texto}</p>
             </div>
           </li>"""
-    for ini, nome, funcao, texto in PALESTRANTES
+    for ini, nome, funcao, texto, foto in PALESTRANTES
 )
 pagina("palestrantes.html", "Palestrantes",
        f"Palestrantes convidados do {EVENTO}, na Ufopa, em Santarém.",
@@ -298,12 +308,12 @@ pagina("inscricoes.html", "Inscrições",
 
 # Organização
 pagina("organizacao.html", "Organização",
-       f"Organização do {EVENTO}, evento do Bacharelado em Inteligência Artificial da Ufopa.",
+       f"Organização do {EVENTO}, evento dos cursos de computação da Ufopa.",
        interna("Organização", [],
-               f"""        <p>O evento é organizado pelo Bacharelado em Inteligência Artificial da Ufopa.</p>
-        <ul class="pessoas pessoas-uma">
+               f"""        <p>O {EVENTO} é promovido pelos cursos de computação da Ufopa e organizado pelo Prof. Dr. Helvecio Bezerra Leal Neto junto com os Centros Acadêmicos desses cursos.</p>
+        <ul class="pessoas">
           <li>
-            <div class="iniciais" aria-hidden="true">HN</div>
+            {retrato("HN", "Helvecio Bezerra Leal Neto", "helvecio-neto.jpg")}
             <div>
               <h3>Prof. Dr. Helvecio Bezerra Leal Neto</h3>
               <p class="funcao">Organização do evento</p>
@@ -311,11 +321,20 @@ pagina("organizacao.html", "Organização",
               <p class="links"><a href="mailto:{EMAIL}">{EMAIL}</a></p>
             </div>
           </li>
+          <li>
+            <div class="iniciais" aria-hidden="true">CA</div>
+            <div>
+              <h3>Centros Acadêmicos dos cursos de computação</h3>
+              <p class="funcao">Organização do evento</p>
+              <p>Representação dos estudantes de {CURSOS}.</p>
+              <p class="links"><a href="https://www.instagram.com/cacc.ufopa/">CA de Ciência da Computação no Instagram</a></p>
+            </div>
+          </li>
         </ul>
         <h2 class="rotulo-secao">Realização:</h2>
         <div class="realizacao">
           <img src="assets/img/ufopa-brasao.png" alt="Brasão da Ufopa" width="72" height="72">
-          <p><strong>Universidade Federal do Oeste do Pará</strong><br>Bacharelado em Inteligência Artificial</p>
+          <p><strong>Universidade Federal do Oeste do Pará</strong><br>Cursos de Computação: {CURSOS}</p>
         </div>"""))
 
 # Local
