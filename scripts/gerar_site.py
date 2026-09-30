@@ -9,7 +9,7 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 URL = "https://worcomp.github.io/"
-VERSAO = "20260930e"  # troque ao alterar o CSS ou o JS, para evitar cache antigo
+VERSAO = "20260930f"  # troque ao alterar o CSS ou o JS, para evitar cache antigo
 EVENTO = "WORCOMP 2026"
 DATAS = "26 e 27 de novembro de 2026"
 LOCAL = "Miniauditório do NTB"
@@ -36,7 +36,7 @@ PROGRAMACAO = [
     ("item", "09h00", "10h00", "Palestra 1", "Desafios do uso de dados no âmbito empresarial", "Palestrante", "Sami Yamouni (Ipiranga)"),
     ("item", "10h00", "10h15", "", "COFFEE BREAK", "", ""),
     ("item", "10h15", "11h15", "Palestra 2", "Desafios do uso de dados no âmbito empresarial", "Palestrante", "Mauro Mitsuo Yamachita Junior (Grupo Malwee)"),
-    ("item", "11h15", "12h15", "Palestra 3", "Agentes de IA e isolamento de dados nas empresas", "Palestrante", "Ari Rocha"),
+    ("item", "11h15", "12h15", "Palestra 3", "Agentes de IA e isolamento de dados nas empresas", "Palestrante", "Ari Rocha (BairesDev)"),
     ("turno", "12h15 - 14h00 ALMOÇO"),
     ("turno", "TARDE"),
     ("item", "14h00", "15h15", "Minicursos", "parte 1 (a confirmar)", "", ""),
@@ -57,9 +57,11 @@ PALESTRANTES = [
      "Palestra: Desafios do uso de dados no âmbito empresarial. Quinta-feira, 26 de novembro, às 9h.",
      "sami-yamouni.jpg"),
     ("MY", "Mauro Mitsuo Yamachita Junior", "Gerente de Dados e IA, Grupo Malwee",
-     "Palestra: Desafios do uso de dados no âmbito empresarial. Quinta-feira, 26 de novembro, às 10h15.", ""),
-    ("AR", "Ari Rocha", "Palestrante convidado",
-     "Palestra: Agentes de IA e isolamento de dados nas empresas. Quinta-feira, 26 de novembro, às 11h15.", ""),
+     "Palestra: Desafios do uso de dados no âmbito empresarial. Quinta-feira, 26 de novembro, às 10h15.",
+     "mauro-yamachita.jpg"),
+    ("AR", "Ari Rocha", "Engenheiro de Software Sênior, BairesDev",
+     "Palestra: Agentes de IA e isolamento de dados nas empresas. Quinta-feira, 26 de novembro, às 11h15.",
+     "ari-rocha.jpg"),
 ]
 
 ATUAL = ' aria-current="page"'
