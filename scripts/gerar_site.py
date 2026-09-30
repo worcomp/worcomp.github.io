@@ -9,7 +9,7 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 URL = "https://worcomp.github.io/"
-VERSAO = "20260930g"  # troque ao alterar o CSS ou o JS, para evitar cache antigo
+VERSAO = "20260930h"  # troque ao alterar o CSS ou o JS, para evitar cache antigo
 EVENTO = "WORCOMP 2026"
 DATAS = "26 e 27 de novembro de 2026"
 LOCAL = "Miniauditório do NTB"
@@ -205,13 +205,7 @@ pagina("index.html", "Início",
        f"""    <div class="container">
       <div class="faixa-evento">
         <p class="faixa-lado">Santarém<br>Pará</p>
-        <div class="faixa-centro">
-          <img src="assets/img/logo.svg" alt="" width="84" height="84">
-          <div>
-            <p class="faixa-nome">WOR<span>COMP</span></p>
-            <p class="faixa-sub">Ufopa · 2026</p>
-          </div>
-        </div>
+        <img class="faixa-logo" src="assets/img/logo-horizontal.svg" alt="WORCOMP, Ufopa, Santarém, 2026" width="368" height="84">
         <p class="faixa-lado faixa-data"><span>26 e 27</span><br>Novembro</p>
       </div>
     </div>

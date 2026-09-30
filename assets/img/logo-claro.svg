@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="WORCOMP 2026">
+  <g fill="none" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" transform="translate(12.5 15.5) scale(0.75 0.825)">
+    <mask id="corte" maskUnits="userSpaceOnUse" x="-10" y="-10" width="80" height="60"><rect x="-10" y="-10" width="80" height="60" fill="#fff"/><path d="M0 0l13 40L26 0" fill="none" stroke="#000" stroke-width="12.5" stroke-linecap="round" stroke-linejoin="round"/></mask><path d="M26 0l13 40L52 0" stroke="#9bb93b" mask="url(#corte)"/><path d="M0 0l13 40L26 0" stroke="#19413a"/>
+  </g>
+</svg>

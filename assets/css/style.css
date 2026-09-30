@@ -393,3 +393,6 @@ blockquote footer { font-size: 0.9rem; color: var(--texto-suave); margin-top: 0.
 }
 
 .foto-logo { object-position: center; }
+
+.faixa-logo { width: clamp(15rem, 40vw, 29rem); height: auto; }
+@media (max-width: 860px) { .faixa-logo { order: -1; } }
