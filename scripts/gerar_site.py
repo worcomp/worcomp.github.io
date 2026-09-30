@@ -9,7 +9,7 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 URL = "https://worcomp.github.io/"
-VERSAO = "20260930f"  # troque ao alterar o CSS ou o JS, para evitar cache antigo
+VERSAO = "20260930g"  # troque ao alterar o CSS ou o JS, para evitar cache antigo
 EVENTO = "WORCOMP 2026"
 DATAS = "26 e 27 de novembro de 2026"
 LOCAL = "Miniauditório do NTB"
@@ -325,26 +325,28 @@ pagina("organizacao.html", "Organização",
             </div>
           </li>
           <li>
-            {retrato("BS", "Bruno Almeida da Silva", "")}
+            {retrato("BS", "Bruno Almeida da Silva", "bruno-silva.jpg")}
             <div>
               <h3>Prof. Bruno Almeida da Silva</h3>
               <p class="funcao">Organização do evento</p>
-              <p>Professor da Ufopa.</p>
+              <p>Professor do Instituto de Engenharia e Geociências da Ufopa.</p>
+              <p class="links"><a href="mailto:bruno.as@ufopa.edu.br">bruno.as@ufopa.edu.br</a></p>
             </div>
           </li>
           <li>
-            {retrato("DP", "Deyvison de Paiva Penha", "")}
+            {retrato("DP", "Deyvison de Paiva Penha", "deyvison-penha.jpg")}
             <div>
               <h3>Prof. Deyvison de Paiva Penha</h3>
               <p class="funcao">Organização do evento</p>
-              <p>Professor da Ufopa.</p>
+              <p>Professor do Instituto de Engenharia e Geociências da Ufopa.</p>
+              <p class="links"><a href="mailto:deyvison.penha@ufopa.edu.br">deyvison.penha@ufopa.edu.br</a></p>
             </div>
           </li>
         </ul>
         <h2>Centros Acadêmicos</h2>
         <ul class="pessoas">
           <li>
-            <div class="iniciais" aria-hidden="true">CC</div>
+            <img class="foto foto-logo" src="assets/img/pessoas/ca-cacc.jpg" alt="Logo do CA de Ciência da Computação" width="88" height="88">
             <div>
               <h3>CA de Ciência da Computação</h3>
               <p class="funcao">Organização do evento</p>
@@ -352,7 +354,7 @@ pagina("organizacao.html", "Organização",
             </div>
           </li>
           <li>
-            <div class="iniciais" aria-hidden="true">SI</div>
+            <img class="foto foto-logo" src="assets/img/pessoas/ca-casi.jpg" alt="Logo do CA de Sistemas de Informação" width="88" height="88">
             <div>
               <h3>CA de Sistemas de Informação</h3>
               <p class="funcao">Organização do evento</p>
@@ -360,9 +362,9 @@ pagina("organizacao.html", "Organização",
             </div>
           </li>
           <li>
-            <div class="iniciais" aria-hidden="true">IA</div>
+            <img class="foto foto-logo" src="assets/img/pessoas/ca-caiat.jpg" alt="Logo do CA de Inteligência Artificial do Tapajós" width="88" height="88">
             <div>
-              <h3>CA de Inteligência Artificial</h3>
+              <h3>CA de Inteligência Artificial do Tapajós (CAIAT)</h3>
               <p class="funcao">Organização do evento</p>
               <p class="links"><a href="https://www.instagram.com/caiat.ufopa/">@caiat.ufopa no Instagram</a></p>
             </div>
