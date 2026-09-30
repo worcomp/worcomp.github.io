@@ -9,7 +9,7 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 URL = "https://worcomp.github.io/"
-VERSAO = "20260930d"  # troque ao alterar o CSS ou o JS, para evitar cache antigo
+VERSAO = "20260930e"  # troque ao alterar o CSS ou o JS, para evitar cache antigo
 EVENTO = "WORCOMP 2026"
 DATAS = "26 e 27 de novembro de 2026"
 LOCAL = "Miniauditório do NTB"
@@ -310,7 +310,8 @@ pagina("inscricoes.html", "Inscrições",
 pagina("organizacao.html", "Organização",
        f"Organização do {EVENTO}, evento dos cursos de computação da Ufopa.",
        interna("Organização", [],
-               f"""        <p>O {EVENTO} é promovido pelos cursos de computação da Ufopa e organizado pelo Prof. Dr. Helvecio Bezerra Leal Neto junto com os Centros Acadêmicos desses cursos.</p>
+               f"""        <p>O {EVENTO} é promovido pelos cursos de computação da Ufopa e organizado por professores desses cursos junto com os Centros Acadêmicos.</p>
+        <h2>Professores</h2>
         <ul class="pessoas">
           <li>
             {retrato("HN", "Helvecio Bezerra Leal Neto", "helvecio-neto.jpg")}
@@ -322,12 +323,46 @@ pagina("organizacao.html", "Organização",
             </div>
           </li>
           <li>
-            <div class="iniciais" aria-hidden="true">CA</div>
+            {retrato("BS", "Bruno Almeida da Silva", "")}
             <div>
-              <h3>Centros Acadêmicos dos cursos de computação</h3>
+              <h3>Prof. Bruno Almeida da Silva</h3>
               <p class="funcao">Organização do evento</p>
-              <p>Representação dos estudantes de {CURSOS}.</p>
-              <p class="links"><a href="https://www.instagram.com/cacc.ufopa/">CA de Ciência da Computação no Instagram</a></p>
+              <p>Professor da Ufopa.</p>
+            </div>
+          </li>
+          <li>
+            {retrato("DP", "Deyvison de Paiva Penha", "")}
+            <div>
+              <h3>Prof. Deyvison de Paiva Penha</h3>
+              <p class="funcao">Organização do evento</p>
+              <p>Professor da Ufopa.</p>
+            </div>
+          </li>
+        </ul>
+        <h2>Centros Acadêmicos</h2>
+        <ul class="pessoas">
+          <li>
+            <div class="iniciais" aria-hidden="true">CC</div>
+            <div>
+              <h3>CA de Ciência da Computação</h3>
+              <p class="funcao">Organização do evento</p>
+              <p class="links"><a href="https://www.instagram.com/cacc.ufopa/">@cacc.ufopa no Instagram</a></p>
+            </div>
+          </li>
+          <li>
+            <div class="iniciais" aria-hidden="true">SI</div>
+            <div>
+              <h3>CA de Sistemas de Informação</h3>
+              <p class="funcao">Organização do evento</p>
+              <p class="links"><a href="https://www.instagram.com/casiufopa/">@casiufopa no Instagram</a></p>
+            </div>
+          </li>
+          <li>
+            <div class="iniciais" aria-hidden="true">IA</div>
+            <div>
+              <h3>CA de Inteligência Artificial</h3>
+              <p class="funcao">Organização do evento</p>
+              <p class="links"><a href="https://www.instagram.com/caiat.ufopa/">@caiat.ufopa no Instagram</a></p>
             </div>
           </li>
         </ul>
