@@ -9,7 +9,7 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 URL = "https://worcomp.github.io/"
-VERSAO = "20260930a"  # troque ao alterar o CSS ou o JS, para evitar cache antigo
+VERSAO = "20260930c"  # troque ao alterar o CSS ou o JS, para evitar cache antigo
 EVENTO = "WORCOMP 2026"
 DATAS = "26 e 27 de novembro de 2026"
 LOCAL = "Miniauditório do NTB"
@@ -24,29 +24,29 @@ MENU = [
     ("local.html", "Local"),
 ]
 
-# (horário, atividade, responsável ou observação); horário None = turno
+# Linhas da tabela de programação:
+#   ("dia", texto) e ("turno", texto) são faixas
+#   ("item", início, fim, atividade, título, rótulo, responsável)
 PROGRAMACAO = [
-    ("Quinta-feira, 26 de novembro", [
-        (None, "Manhã", ""),
-        ("08:00 – 09:00", "Credenciamento e abertura", ""),
-        ("09:00 – 10:00", "Palestra 1: Desafios do uso de dados no âmbito empresarial", "Sami Yamouni"),
-        ("10:00 – 10:15", "Pausa para o café", ""),
-        ("10:15 – 11:15", "Palestra 2: Desafios do uso de dados no âmbito empresarial", "Mauro Mitsuo Yamachita Junior (Malwee)"),
-        ("11:15 – 12:15", "Palestra 3: Agentes de IA e isolamento de dados nas empresas", "Ari Rocha"),
-        ("12:15 – 14:00", "Almoço", ""),
-        (None, "Tarde", ""),
-        ("14:00 – 15:15", "Minicursos, parte 1", "A confirmar"),
-        ("15:15 – 15:30", "Pausa para o café", ""),
-        ("15:30 – 17:00", "Minicursos, parte 2", "A confirmar"),
-    ]),
-    ("Sexta-feira, 27 de novembro", [
-        (None, "Tarde", ""),
-        ("14:00 – 15:15", "Roda de conversa sobre Inteligência Artificial", "Participantes a confirmar"),
-        ("15:15 – 15:30", "Pausa para o café", ""),
-        ("15:30 – 17:00", "Apresentação de trabalhos de alunos", "20 minutos por trabalho"),
-        ("17:00 – 17:30", "Encerramento", ""),
-        ("17:30", "Confraternização", "Local a confirmar"),
-    ]),
+    ("dia", "DIA 01 (26/11)"),
+    ("turno", "MANHÃ"),
+    ("item", "08h00", "09h00", "Credenciamento e Cerimônia de Abertura", "", "", ""),
+    ("item", "09h00", "10h00", "Palestra 1", "Desafios do uso de dados no âmbito empresarial", "Palestrante", "Sami Yamouni"),
+    ("item", "10h00", "10h15", "", "COFFEE BREAK", "", ""),
+    ("item", "10h15", "11h15", "Palestra 2", "Desafios do uso de dados no âmbito empresarial", "Palestrante", "Mauro Mitsuo Yamachita Junior (Malwee)"),
+    ("item", "11h15", "12h15", "Palestra 3", "Agentes de IA e isolamento de dados nas empresas", "Palestrante", "Ari Rocha"),
+    ("turno", "12h15 - 14h00 ALMOÇO"),
+    ("turno", "TARDE"),
+    ("item", "14h00", "15h15", "Minicursos", "parte 1 (a confirmar)", "", ""),
+    ("item", "15h15", "15h30", "", "COFFEE BREAK", "", ""),
+    ("item", "15h30", "17h00", "Minicursos", "parte 2 (a confirmar)", "", ""),
+    ("dia", "DIA 02 (27/11)"),
+    ("turno", "TARDE"),
+    ("item", "14h00", "15h15", "Roda de Conversa", "Inteligência Artificial", "", ""),
+    ("item", "15h15", "15h30", "", "COFFEE BREAK", "", ""),
+    ("item", "15h30", "17h00", "Apresentação de trabalhos de alunos", "", "", ""),
+    ("item", "17h00", "17h30", "Cerimônia de Encerramento", "", "", ""),
+    ("item", "17h30", "", "Confraternização", "local a confirmar", "", ""),
 ]
 
 # (iniciais, nome, função, texto)
@@ -59,7 +59,6 @@ PALESTRANTES = [
      "Palestra: Agentes de IA e isolamento de dados nas empresas. Quinta-feira, 26 de novembro, às 11h15."),
 ]
 
-
 ATUAL = ' aria-current="page"'
 
 
@@ -68,8 +67,10 @@ def pagina(arquivo, titulo, descricao, corpo):
         f'          <li><a href="{href}"{ATUAL if href == arquivo else ""}>{nome}</a></li>'
         for href, nome in MENU
     )
-    titulo_completo = f"{EVENTO} | Ufopa" if arquivo == "index.html" else f"{titulo} | {EVENTO}"
-    url = URL if arquivo == "index.html" else URL + arquivo
+    inicio = arquivo == "index.html"
+    titulo_completo = f"{EVENTO} | Ufopa" if inicio else f"{titulo} | {EVENTO}"
+    url = URL if inicio else URL + arquivo
+    migalha = f'<span>{EVENTO}</span>' if inicio else f'<a href="index.html">{EVENTO}</a> <span aria-hidden="true">›</span> <span>{titulo}</span>'
     html = f"""<!doctype html>
 <html lang="pt-BR">
 <head>
@@ -119,6 +120,9 @@ def pagina(arquivo, titulo, descricao, corpo):
   </header>
 
   <main id="conteudo">
+    <div class="container">
+      <nav class="trilha" aria-label="Você está aqui"><a href="https://www.ufopa.edu.br/">Ufopa</a> <span aria-hidden="true">›</span> <span>Eventos</span> <span aria-hidden="true">›</span> {migalha}</nav>
+    </div>
 {corpo}
   </main>
 
@@ -152,107 +156,96 @@ def pagina(arquivo, titulo, descricao, corpo):
     print("ok", arquivo)
 
 
-def cabecalho_interno(sobretitulo, titulo, abertura):
-    return f"""    <section class="hero hero-interno">
+def interna(titulo, botoes, conteudo):
+    """Página interna: título centralizado, botões de atalho e conteúdo."""
+    grade = ""
+    if botoes:
+        links = "\n".join(f'          <a href="{href}">{nome}</a>' for href, nome in botoes)
+        grade = f'        <nav class="atalhos" aria-label="Atalhos">\n{links}\n        </nav>\n'
+    return f"""    <section class="pagina">
       <div class="container">
-        <p class="hero-local">{sobretitulo}</p>
         <h1>{titulo}</h1>
-        <p class="hero-texto">{abertura}</p>
+{grade}{conteudo}
       </div>
-    </section>
-"""
+    </section>"""
 
 
-def tabelas_programacao():
-    blocos = []
-    for dia, linhas in PROGRAMACAO:
-        corpo = []
-        for hora, atividade, obs in linhas:
-            if hora is None:
-                corpo.append(f'              <tr class="turno"><th colspan="3" scope="colgroup">{atividade}</th></tr>')
-            elif atividade.startswith(("Pausa", "Almoço")):
-                corpo.append(f'              <tr class="pausa"><td>{hora}</td><td colspan="2">{atividade}</td></tr>')
-            else:
-                corpo.append(f"              <tr><td>{hora}</td><td><strong>{atividade}</strong></td><td>{obs}</td></tr>")
-        blocos.append(f"""        <div class="rolagem">
-          <table>
-            <caption>{dia}</caption>
-            <thead>
-              <tr><th scope="col">Horário</th><th scope="col">Atividade</th><th scope="col">Responsável</th></tr>
-            </thead>
-            <tbody>
-{chr(10).join(corpo)}
-            </tbody>
-          </table>
-        </div>""")
-    return "\n".join(blocos)
+def tabela_programacao():
+    linhas = []
+    for linha in PROGRAMACAO:
+        if linha[0] == "dia":
+            linhas.append(f'            <tr class="faixa faixa-dia"><th colspan="3" scope="colgroup">{linha[1]}</th></tr>')
+        elif linha[0] == "turno":
+            linhas.append(f'            <tr class="faixa"><th colspan="3" scope="colgroup">{linha[1]}</th></tr>')
+        else:
+            _, ini, fim, atividade, titulo, rotulo, quem = linha
+            texto = f"<strong>{atividade}{':' if titulo else ''}</strong> {titulo}" if atividade else titulo
+            if quem:
+                texto += f"<br><strong>{rotulo}:</strong> {quem}"
+            linhas.append(f"            <tr><td>{ini}</td><td>{fim}</td><td>{texto.strip()}</td></tr>")
+    return "\n".join(linhas)
 
 
 # Início
+botoes_inicio = "\n".join(f'        <a href="{href}">{nome}</a>' for href, nome in MENU[1:])
 pagina("index.html", "Início",
        f"{EVENTO}: palestras, minicursos, roda de conversa sobre Inteligência Artificial e trabalhos de alunos na Ufopa, em Santarém, nos dias {DATAS}.",
-       f"""    <section class="hero">
-      <div class="container">
-        <p class="hero-local">{DATAS} · Ufopa · Santarém, Pará</p>
-        <h1>{EVENTO}</h1>
-        <p class="hero-texto">Dois dias de palestras, minicursos, roda de conversa sobre Inteligência Artificial e apresentação de trabalhos de alunos na Universidade Federal do Oeste do Pará.</p>
-        <div class="botoes">
-          <a class="botao" href="programacao.html">Ver a programação</a>
-          <a class="botao botao-vazado" href="inscricoes.html">Inscrições</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="secao">
-      <div class="container colunas">
-        <div>
-          <p class="sobretitulo">O evento</p>
-          <h2>Computação e Inteligência Artificial na Ufopa</h2>
-          <p class="abertura">O {EVENTO} aproxima estudantes, professores e profissionais que trabalham com dados e Inteligência Artificial.</p>
-          <p>O evento é organizado pelo Bacharelado em Inteligência Artificial da Ufopa. Na quinta-feira, profissionais convidados falam sobre o uso de dados e de agentes de IA nas empresas. Na sexta-feira, a tarde é dedicada a uma roda de conversa sobre Inteligência Artificial e aos trabalhos desenvolvidos pelos alunos.</p>
-          <p>A programação é prévia e pode mudar. As atividades acontecem no {LOCAL}.</p>
-        </div>
-        <aside class="lateral">
-          <h2>Quando</h2>
-          <p>{DATAS}<br>Quinta e sexta-feira</p>
-          <h2>Onde</h2>
-          <p>{LOCAL}<br>Ufopa, Santarém (PA)</p>
-          <h2>Organização</h2>
-          <p>Prof. Dr. Helvecio Bezerra Leal Neto<br>Bacharelado em Inteligência Artificial</p>
-        </aside>
-      </div>
-    </section>
-
-    <section class="secao secao-suave">
-      <div class="container">
-        <div class="secao-titulo">
+       f"""    <div class="container">
+      <div class="faixa-evento">
+        <p class="faixa-lado">Santarém<br>Pará</p>
+        <div class="faixa-centro">
+          <img src="assets/img/logo.svg" alt="" width="84" height="84">
           <div>
-            <p class="sobretitulo">Atividades</p>
-            <h2>O que vai acontecer</h2>
+            <p class="faixa-nome">WOR<span>COMP</span></p>
+            <p class="faixa-sub">Ufopa · 2026</p>
           </div>
         </div>
-        <ul class="recursos">
-          <li><strong>Palestras</strong><span>Três palestras de uma hora na manhã de quinta-feira, com profissionais do mercado.</span></li>
-          <li><strong>Minicursos</strong><span>Previstos para a tarde de quinta-feira. Os temas serão divulgados em breve.</span></li>
-          <li><strong>Roda de conversa</strong><span>Uma conversa aberta sobre Inteligência Artificial, na tarde de sexta-feira.</span></li>
-          <li><strong>Trabalhos de alunos</strong><span>Apresentações de 20 minutos de trabalhos desenvolvidos por estudantes.</span></li>
-          <li><strong>Encerramento</strong><span>Fechamento do evento no fim da tarde de sexta-feira.</span></li>
-          <li><strong>Confraternização</strong><span>Encontro de participantes e organização depois do encerramento.</span></li>
-        </ul>
+        <p class="faixa-lado faixa-data"><span>26 e 27</span><br>Novembro</p>
       </div>
-    </section>
+    </div>
 
-    <section class="secao">
+    <div class="grade-botoes">
+      <nav class="container" aria-label="Seções do evento">
+{botoes_inicio}
+      </nav>
+    </div>
+
+    <section class="pagina">
       <div class="container">
-        <p class="sobretitulo">Agenda</p>
-        <h2>Datas do evento</h2>
-        <dl class="datas">
-          <div><dt>26 de novembro, manhã</dt><dd>Credenciamento, abertura e palestras.</dd></div>
-          <div><dt>26 de novembro, tarde</dt><dd>Minicursos (a confirmar).</dd></div>
-          <div><dt>27 de novembro, tarde</dt><dd>Roda de conversa sobre Inteligência Artificial, trabalhos de alunos, encerramento e confraternização.</dd></div>
-        </dl>
-        <div class="botoes">
-          <a class="botao botao-escuro" href="programacao.html">Programação completa</a>
+        <p>O {EVENTO} é um evento promovido pelo Bacharelado em Inteligência Artificial da <a href="https://www.ufopa.edu.br/">Universidade Federal do Oeste do Pará (Ufopa)</a>. O evento aproxima estudantes, professores e profissionais que trabalham com computação, dados e Inteligência Artificial, e abre espaço para os alunos apresentarem os trabalhos que desenvolvem.</p>
+        <p>A edição deste ano será realizada presencialmente na Ufopa, em Santarém (PA), no {LOCAL}, nos dias {DATAS}.</p>
+        <p>A programação inclui as atividades:</p>
+        <ul>
+          <li><strong>Palestras:</strong> profissionais convidados falam sobre o uso de dados e de agentes de Inteligência Artificial nas empresas.</li>
+          <li><strong>Minicursos:</strong> previstos para a tarde do primeiro dia. Os temas serão divulgados em breve.</li>
+          <li><strong>Roda de conversa:</strong> um momento de diálogo aberto sobre Inteligência Artificial entre convidados e participantes do evento.</li>
+          <li><strong>Trabalhos de alunos:</strong> apresentação de trabalhos desenvolvidos por estudantes.</li>
+          <li><strong>Confraternização:</strong> encontro de participantes e organização depois da cerimônia de encerramento.</li>
+        </ul>
+
+        <p class="rotulo">Datas importantes:</p>
+        <div class="rolagem tabela-simples">
+          <table>
+            <thead>
+              <tr><th scope="col">Categoria</th><th scope="col">Data</th><th scope="col">Evento</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="rowgroup" rowspan="6">Cronograma geral – {EVENTO}</th><td>26 de novembro</td><td>Credenciamento e cerimônia de abertura</td></tr>
+              <tr><td>26 de novembro</td><td>Palestras</td></tr>
+              <tr><td>26 de novembro</td><td>Minicursos (a confirmar)</td></tr>
+              <tr><td>27 de novembro</td><td>Roda de conversa sobre Inteligência Artificial</td></tr>
+              <tr><td>27 de novembro</td><td>Apresentação de trabalhos de alunos</td></tr>
+              <tr><td>27 de novembro</td><td>Cerimônia de encerramento e confraternização</td></tr>
+              <tr><th scope="row">Inscrições</th><td>A divulgar</td><td>Abertura das inscrições</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>A programação completa do evento pode ser acessada na <a href="programacao.html">aba Programação</a>.</p>
+
+        <h2 class="rotulo-secao">Realização:</h2>
+        <div class="realizacao">
+          <img src="assets/img/ufopa-brasao.png" alt="Brasão da Ufopa" width="72" height="72">
+          <p><strong>Universidade Federal do Oeste do Pará</strong><br>Bacharelado em Inteligência Artificial</p>
         </div>
       </div>
     </section>""")
@@ -260,17 +253,18 @@ pagina("index.html", "Início",
 # Programação
 pagina("programacao.html", "Programação",
        f"Programação prévia do {EVENTO}, nos dias {DATAS}, no {LOCAL} da Ufopa.",
-       cabecalho_interno("Programação prévia", "Programação", f"{DATAS}, no {LOCAL}. Os horários podem mudar.")
-       + f"""    <section class="secao">
-      <div class="container">
-{tabelas_programacao()}
-        <h2>Formato das atividades</h2>
-        <ul>
-          <li>Palestras: 1 hora, com 45 minutos de apresentação e 15 minutos de perguntas.</li>
-          <li>Trabalhos de alunos: 20 minutos, com 15 minutos de apresentação e 5 minutos de perguntas.</li>
-        </ul>
-      </div>
-    </section>""")
+       interna("Programação",
+               [("palestrantes.html", "Palestras"), ("inscricoes.html", "Inscrições"), ("local.html", "Local")],
+               f"""        <p>Confira a programação prévia na tabela abaixo. As atividades acontecem no {LOCAL} e os horários podem mudar.</p>
+        <h2>Programação do {EVENTO}</h2>
+        <div class="rolagem tabela-programacao">
+          <table>
+            <tbody>
+{tabela_programacao()}
+            </tbody>
+          </table>
+        </div>
+        <p>As palestras têm 1 hora, com 45 minutos de apresentação e 15 minutos de perguntas. Cada trabalho de aluno tem 20 minutos, com 15 de apresentação e 5 de perguntas.</p>"""))
 
 # Palestrantes
 cartoes = "\n".join(
@@ -286,44 +280,27 @@ cartoes = "\n".join(
 )
 pagina("palestrantes.html", "Palestrantes",
        f"Palestrantes convidados do {EVENTO}, na Ufopa, em Santarém.",
-       cabecalho_interno("Quinta-feira, 26 de novembro", "Palestrantes", "Profissionais convidados para a manhã de palestras.")
-       + f"""    <section class="secao">
-      <div class="container">
+       interna("Palestrantes", [],
+               f"""        <p>As palestras acontecem na manhã de quinta-feira, 26 de novembro, com profissionais convidados.</p>
         <ul class="pessoas">
 {cartoes}
-        </ul>
-      </div>
-    </section>""")
+        </ul>"""))
 
 # Inscrições
 pagina("inscricoes.html", "Inscrições",
        f"Inscrições e envio de trabalhos para o {EVENTO}, na Ufopa.",
-       cabecalho_interno("Participe", "Inscrições", "As inscrições ainda não estão abertas.")
-       + f"""    <section class="secao">
-      <div class="container">
-        <div class="cartoes-contato">
-          <section>
-            <h2>Inscrição no evento</h2>
-            <p>O formulário de inscrição será publicado nesta página. A data de abertura ainda será divulgada.</p>
-          </section>
-          <section>
-            <h2>Trabalhos de alunos</h2>
-            <p>Na sexta-feira, 27 de novembro, haverá apresentação de trabalhos de alunos. As orientações para participar serão publicadas aqui.</p>
-          </section>
-          <section>
-            <h2>Dúvidas</h2>
-            <p>Escreva para <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>
-          </section>
-        </div>
-      </div>
-    </section>""")
+       interna("Inscrições", [],
+               f"""        <p>As inscrições ainda não estão abertas. O formulário será publicado nesta página, e a data de abertura ainda será divulgada.</p>
+        <h2>Trabalhos de alunos</h2>
+        <p>Na sexta-feira, 27 de novembro, haverá apresentação de trabalhos de alunos. As orientações para participar serão publicadas aqui.</p>
+        <h2>Dúvidas</h2>
+        <p>Escreva para <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>"""))
 
 # Organização
 pagina("organizacao.html", "Organização",
        f"Organização do {EVENTO}, evento do Bacharelado em Inteligência Artificial da Ufopa.",
-       cabecalho_interno("Quem organiza", "Organização", "O evento é organizado pelo Bacharelado em Inteligência Artificial da Ufopa.")
-       + f"""    <section class="secao">
-      <div class="container">
+       interna("Organização", [],
+               f"""        <p>O evento é organizado pelo Bacharelado em Inteligência Artificial da Ufopa.</p>
         <ul class="pessoas pessoas-uma">
           <li>
             <div class="iniciais" aria-hidden="true">HN</div>
@@ -335,35 +312,22 @@ pagina("organizacao.html", "Organização",
             </div>
           </li>
         </ul>
-      </div>
-    </section>
-
-    <section class="secao secao-suave">
-      <div class="container">
-        <p class="sobretitulo">Realização</p>
-        <h2>Universidade Federal do Oeste do Pará</h2>
-        <p class="texto">Bacharelado em Inteligência Artificial.</p>
-      </div>
-    </section>""")
+        <h2 class="rotulo-secao">Realização:</h2>
+        <div class="realizacao">
+          <img src="assets/img/ufopa-brasao.png" alt="Brasão da Ufopa" width="72" height="72">
+          <p><strong>Universidade Federal do Oeste do Pará</strong><br>Bacharelado em Inteligência Artificial</p>
+        </div>"""))
 
 # Local
 pagina("local.html", "Local",
        f"Onde acontece o {EVENTO}: {LOCAL}, Ufopa, Santarém, Pará.",
-       cabecalho_interno("Como chegar", "Local", f"As atividades acontecem no {LOCAL}, na Ufopa, em Santarém.")
-       + f"""    <section class="secao">
-      <div class="container">
-        <div class="cartoes-contato">
-          <section>
-            <h2>{LOCAL}</h2>
-            <p>Universidade Federal do Oeste do Pará<br>
-            Rua Vera Paz, s/n, Salé<br>
-            Santarém, Pará</p>
-          </section>
-          <section>
-            <h2>Dias e horários</h2>
-            <p>Quinta-feira, 26 de novembro: das 8h às 17h.<br>
-            Sexta-feira, 27 de novembro: das 14h às 17h30, seguida da confraternização.</p>
-          </section>
-        </div>
-      </div>
-    </section>""")
+       interna("Local", [],
+               f"""        <p>As atividades do {EVENTO} acontecem no {LOCAL}, na Universidade Federal do Oeste do Pará, em Santarém.</p>
+        <h2>Endereço</h2>
+        <p>{LOCAL}<br>
+        Universidade Federal do Oeste do Pará<br>
+        Rua Vera Paz, s/n, Salé<br>
+        Santarém, Pará</p>
+        <h2>Dias e horários</h2>
+        <p>Quinta-feira, 26 de novembro: das 8h às 17h.<br>
+        Sexta-feira, 27 de novembro: das 14h às 17h30, seguida da confraternização.</p>"""))

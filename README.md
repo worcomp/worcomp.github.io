@@ -2,7 +2,7 @@
 
 Site do WORCOMP 2026, evento do Bacharelado em Inteligência Artificial da Universidade Federal do Oeste do Pará (Ufopa), em Santarém (PA), nos dias 26 e 27 de novembro de 2026.
 
-O layout foi adaptado do site do [LabMet UFOPA](https://github.com/labmet-ufopa/labmet-ufopa.github.io).
+A organização das páginas segue o site do [WorCAP](https://www.gov.br/inpe/pt-br/eventos/worcap-2026), do Inpe: faixa com o nome do evento, botões das seções, texto corrido e tabelas. As cores, as barras superiores e o brasão da Ufopa vêm do site do [LabMet UFOPA](https://github.com/labmet-ufopa/labmet-ufopa.github.io).
 
 ## Páginas
 
